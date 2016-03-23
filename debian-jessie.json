@@ -1,0 +1,56 @@
+{
+  "min_packer_version": "0.9.0",
+  "description": "Debian Jessie box",
+  "variables": {
+    "debian-version": "8.3.0"
+  },
+  "builders": [
+    {
+      "name": "debian-{{user `debian-version`}}",
+      "type": "virtualbox-iso",
+      "guest_os_type": "Debian_64",
+      "vm_name": "{{build_name}}",
+
+      "iso_url": "http://cdimage.debian.org/debian-cd/{{user `debian-version`}}/amd64/iso-cd/debian-{{user `debian-version`}}-amd64-netinst.iso",
+      "iso_checksum_url": "http://cdimage.debian.org/debian-cd/{{user `debian-version`}}/amd64/iso-cd/MD5SUMS",
+      "iso_checksum_type": "md5",
+
+      "hard_drive_interface": "sata",
+      "disk_size": 20000,
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "512"],
+        ["modifyvm", "{{.Name}}", "--vram", "32"],
+        ["modifyvm", "{{.Name}}", "--cpus", "1"],
+        ["modifyvm", "{{.Name}}", "--audio", "none"]
+      ],
+      "guest_additions_mode": "attach",
+
+      "http_directory": "http",
+
+      "boot_wait": "15s",
+      "boot_command": [
+        "<esc><wait>",
+        "auto <wait>",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-jessie.cfg <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "<enter><wait>"
+      ],
+
+      "ssh_port": "22",
+      "ssh_wait_timeout": "3600s",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown -hP now"
+    }
+  ],
+  "_comment": "provisioners not implemented!",
+  "provisioners": [],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level": 9,
+      "output": "boxes/{{.BuildName}}-{{.Provider}}.box"
+    }
+  ]
+}
