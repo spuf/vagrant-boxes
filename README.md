@@ -1,6 +1,6 @@
-# My Vagrant boxes build
+# Vagrant boxes
 
-## Debian Jessie box
+## Debian Jessie
 
 `$ packer build debian-jessie.json`
 
