@@ -2,11 +2,13 @@
   "min_packer_version": "0.9.0",
   "description": "Debian Jessie box",
   "variables": {
-    "debian-version": "8.3.0"
+    "debian-version": "8.3.0",
+    "output": "./boxes",
+    "scripts": "./scripts/debian-jessie"
   },
   "builders": [
     {
-      "name": "debian-{{user `debian-version`}}",
+      "name": "debian-{{user `debian-version`}}-virtualbox",
       "type": "virtualbox-iso",
       "guest_os_type": "Debian_64",
       "vm_name": "{{build_name}}",
@@ -23,7 +25,7 @@
         ["modifyvm", "{{.Name}}", "--cpus", "1"],
         ["modifyvm", "{{.Name}}", "--audio", "none"]
       ],
-      "guest_additions_mode": "attach",
+      "guest_additions_path": "VBoxGuestAdditions.iso",
 
       "http_directory": "http",
 
@@ -37,20 +39,44 @@
       ],
 
       "ssh_port": "22",
-      "ssh_wait_timeout": "3600s",
+      "ssh_wait_timeout": "1800s",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
 
-      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown -hP now"
+      "shutdown_command": "echo 'vagrant' | sudo -S poweroff"
     }
   ],
-  "_comment": "provisioners not implemented!",
-  "provisioners": [],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{user `scripts`}}/1.sudoers.sh",
+      "execute_command": "echo 'vagrant' | sudo -S sh '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "{{user `scripts`}}/2.packages.sh"
+    },
+    {
+      "type": "shell",
+      "override": {
+        "debian-{{user `debian-version`}}-virtualbox": {
+          "script": "{{user `scripts`}}/3.guest_virtualbox.sh"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "{{user `scripts`}}/4.sshd.sh"
+      ]
+    }
+  ],
   "post-processors": [
     {
       "type": "vagrant",
       "compression_level": 9,
-      "output": "boxes/{{.BuildName}}-{{.Provider}}.box"
+      "output": "{{user `output`}}/{{.BuildName}}.box",
+      "keep_input_artifact": true
     }
   ]
 }
