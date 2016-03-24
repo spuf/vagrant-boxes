@@ -1,6 +1,11 @@
 #!/bin/bash -x
-sudo apt-get update
-sudo apt-get install -y \
+
+export DEBIAN_FRONTEND="noninteractive"
+
+sudo apt-get -y update
+sudo apt-get -y upgrade
+
+sudo apt-get -y install \
 	curl \
 	htop \
 	ca-certificates \

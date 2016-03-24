@@ -34,7 +34,6 @@
         "<esc><wait>",
         "auto <wait>",
         "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-jessie.cfg <wait>",
-        "debconf/frontend=noninteractive <wait>",
         "<enter><wait>"
       ],
 
@@ -43,14 +42,14 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
 
-      "shutdown_command": "echo 'vagrant' | sudo -S poweroff"
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown now"
     }
   ],
   "provisioners": [
     {
       "type": "shell",
       "script": "{{user `scripts`}}/1.sudoers.sh",
-      "execute_command": "echo 'vagrant' | sudo -S sh '{{.Path}}'"
+      "execute_command": "echo 'vagrant' | sudo -S /bin/bash -x '{{.Path}}'"
     },
     {
       "type": "shell",
@@ -67,7 +66,11 @@
     {
       "type": "shell",
       "scripts": [
-        "{{user `scripts`}}/4.sshd.sh"
+        "{{user `scripts`}}/sshd.sh",
+        "{{user `scripts`}}/grub.sh",
+        "{{user `scripts`}}/vagrant.sh",
+
+        "{{user `scripts`}}/0.cleanup.sh"
       ]
     }
   ],
@@ -75,8 +78,7 @@
     {
       "type": "vagrant",
       "compression_level": 9,
-      "output": "{{user `output`}}/{{.BuildName}}.box",
-      "keep_input_artifact": true
+      "output": "{{user `output`}}/{{.BuildName}}.box"
     }
   ]
 }
