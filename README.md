@@ -8,6 +8,6 @@ Supported providers:
 
  - VirtualBox
 
-## Add box
+Add box locally:
 
-`$ vagrant box add -f --name "$(whoami)/debian" ./boxes/debian-8.3.0-virtualbox.box`
+`$ ./vagrant-box-add.sh`

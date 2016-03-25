@@ -8,6 +8,7 @@ sudo apt-get -y upgrade
 sudo apt-get -y install \
 	curl \
 	htop \
+	apt-transport-https \
 	ca-certificates \
 	screen \
 	nano
