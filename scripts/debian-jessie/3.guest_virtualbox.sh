@@ -1,12 +1,16 @@
 #!/bin/bash -x
 
-sudo apt-get -y install linux-headers-$(uname -r) build-essential dkms
+PACKETS="linux-headers-$(uname -r) build-essential dkms"
 
-sudo mkdir /media/VBoxGuestAdditions
-sudo mount -o loop,ro VBoxGuestAdditions.iso /media/VBoxGuestAdditions
-sudo /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
+sudo apt-get -y install $PACKETS
+
+MOUNTPOINT="/media/VBoxGuestAdditions"
+
+sudo mkdir "$MOUNTPOINT"
+sudo mount -o loop,ro VBoxGuestAdditions.iso "$MOUNTPOINT"
+sudo "$MOUNTPOINT/VBoxLinuxAdditions.run"
+sudo umount "$MOUNTPOINT"
+sudo rmdir "$MOUNTPOINT"
 rm VBoxGuestAdditions.iso
-sudo umount /media/VBoxGuestAdditions
-sudo rmdir /media/VBoxGuestAdditions
 
-sudo apt-get -y purge linux-headers-$(uname -r) build-essential dkms
+sudo apt-get -y purge $PACKETS

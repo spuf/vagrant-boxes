@@ -16,5 +16,9 @@ rm /home/vagrant/.*history
 sudo swapoff -a
 sudo swapon -a
 
+# Wipe disk space
+sudo dd if=/dev/zero of=/WIPE bs=1M
+sudo rm -f /WIPE
+
 # sync data to disk
 sync
