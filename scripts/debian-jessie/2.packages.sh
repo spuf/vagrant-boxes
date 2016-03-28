@@ -2,10 +2,10 @@
 
 export DEBIAN_FRONTEND="noninteractive"
 
-sudo apt-get -y update
-sudo apt-get -y upgrade
+sudo apt-get -q -y update
+sudo apt-get -q -y upgrade
 
-sudo apt-get -y install \
+sudo apt-get -q -y install \
 	curl \
 	htop \
 	apt-transport-https \

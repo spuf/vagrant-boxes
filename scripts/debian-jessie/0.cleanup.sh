@@ -1,8 +1,8 @@
 #!/bin/bash -x
 
 # Clean up
-sudo apt-get -y autoremove --purge
-sudo apt-get -y clean
+sudo apt-get -q -y autoremove --purge
+sudo apt-get -q -y clean
 
 # Removing DHCP lease
 sudo dhclient -r
