@@ -12,6 +12,9 @@ sudo rm /var/lib/dhcp/*
 unset HISTFILE
 rm /home/vagrant/.*history
 
+# Remove root files
+sudo rm -rf /root
+
 # Clean swap
 sudo swapoff -a
 sudo swapon -a
