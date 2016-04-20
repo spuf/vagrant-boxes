@@ -10,4 +10,4 @@ Supported providers:
 
 Add box locally:
 
-`$ vagrant box add --force --name "$(whoami)/debian-jessie" boxes/debian-8.3.0-virtualbox.box`
+`$ vagrant box add --force --name "$(whoami)/debian-jessie" boxes/debian-8.4.0-virtualbox.box`
