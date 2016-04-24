@@ -21,10 +21,13 @@
       "disk_size": 20000,
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "512"],
-        ["modifyvm", "{{.Name}}", "--vram", "32"],
-        ["modifyvm", "{{.Name}}", "--cpus", "1"],
+        ["modifyvm", "{{.Name}}", "--vram", "16"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
         ["modifyvm", "{{.Name}}", "--audio", "none"],
-        ["modifyvm", "{{.Name}}", "--nictype1", "Am79C973"]
+        ["modifyvm", "{{.Name}}", "--nictype1", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype2", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype3", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype4", "Am79C973"]
       ],
       "guest_additions_path": "VBoxGuestAdditions.iso",
 
