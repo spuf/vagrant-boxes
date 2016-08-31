@@ -1,0 +1,99 @@
+{
+  "min_packer_version": "0.10.1",
+  "description": "Ubuntu Xenial Xerus box",
+  "variables": {
+    "ubuntu-version": "16.04.1",
+    "output": "./boxes",
+    "scripts": "./scripts/ubuntu-xenial"
+  },
+  "builders": [
+    {
+      "name": "ubuntu-{{user `ubuntu-version`}}-virtualbox",
+      "type": "virtualbox-iso",
+      "guest_os_type": "Debian_64",
+      "vm_name": "{{build_name}}",
+
+      "iso_url": "http://releases.ubuntu.com/{{user `ubuntu-version`}}/ubuntu-{{user `ubuntu-version`}}-server-amd64.iso",
+      "iso_checksum_url": "http://releases.ubuntu.com/{{user `ubuntu-version`}}/MD5SUMS",
+      "iso_checksum_type": "md5",
+
+      "hard_drive_interface": "sata",
+      "disk_size": 20000,
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "512"],
+        ["modifyvm", "{{.Name}}", "--vram", "16"],
+        ["modifyvm", "{{.Name}}", "--cpus", "1"],
+        ["modifyvm", "{{.Name}}", "--audio", "none"],
+        ["modifyvm", "{{.Name}}", "--nictype1", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype2", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype3", "Am79C973"],
+        ["modifyvm", "{{.Name}}", "--nictype4", "Am79C973"]
+      ],
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+
+      "http_directory": "http",
+
+      "boot_wait": "10s",
+      "boot_command": [
+        "<esc><wait><f6><wait><esc><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "initrd=/install/initrd.gz ",
+        "auto ",
+        "url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-xenial.cfg ",
+        "locale=en_US.UTF-8 ",
+        "hostname=vagrant ",
+        "keymap=us ",
+        "vga=normal ",
+        "fb=false ",
+        "<enter>"
+      ],
+
+      "ssh_port": "22",
+      "ssh_wait_timeout": "1800s",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/shutdown now"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{user `scripts`}}/1.sudoers.sh",
+      "execute_command": "echo 'vagrant' | sudo -S /bin/bash -x '{{.Path}}'"
+    },
+    {
+      "type": "shell",
+      "script": "{{user `scripts`}}/2.packages.sh"
+    },
+    {
+      "type": "shell",
+      "override": {
+        "ubuntu-{{user `ubuntu-version`}}-virtualbox": {
+          "script": "{{user `scripts`}}/3.guest_virtualbox.sh"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "{{user `scripts`}}/sshd.sh",
+        "{{user `scripts`}}/grub.sh",
+        "{{user `scripts`}}/vagrant.sh",
+
+        "{{user `scripts`}}/0.cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level": 9,
+      "output": "{{user `output`}}/{{.BuildName}}.box"
+    }
+  ]
+}
