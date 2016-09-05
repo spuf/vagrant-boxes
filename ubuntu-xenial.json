@@ -10,7 +10,7 @@
     {
       "name": "ubuntu-{{user `ubuntu-version`}}-virtualbox",
       "type": "virtualbox-iso",
-      "guest_os_type": "Debian_64",
+      "guest_os_type": "Ubuntu_64",
       "vm_name": "{{build_name}}",
 
       "iso_url": "http://releases.ubuntu.com/{{user `ubuntu-version`}}/ubuntu-{{user `ubuntu-version`}}-server-amd64.iso",
@@ -63,12 +63,19 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "{{user `scripts`}}/1.sudoers.sh",
+      "scripts": [
+        "{{user `scripts`}}/1.packages.sh",
+        "{{user `scripts`}}/2.sudoers.sh"
+      ],
       "execute_command": "echo 'vagrant' | sudo -S /bin/bash -x '{{.Path}}'"
     },
     {
       "type": "shell",
-      "script": "{{user `scripts`}}/2.packages.sh"
+      "inline": [
+        "echo 'vagrant' | sudo -S reboot",
+        "echo 'vagrant' | sudo -S ifdown -a",
+        "sleep 100"
+      ]
     },
     {
       "type": "shell",

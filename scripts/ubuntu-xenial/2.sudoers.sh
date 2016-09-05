@@ -7,3 +7,5 @@ chmod 440 /etc/sudoers.d/vagrant
 
 # Vagrant does not use a pty or tty by default when connected via SSH
 echo "Defaults !requiretty" >> /etc/sudoers
+
+echo "Defaults env_keep += DEBIAN_FRONTEND" >> /etc/sudoers

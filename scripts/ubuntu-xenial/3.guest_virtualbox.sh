@@ -1,8 +1,10 @@
 #!/bin/bash -x
 
-PACKETS="linux-headers-$(uname -r) build-essential dkms"
+export DEBIAN_FRONTEND="noninteractive"
 
-sudo apt-get -q -y install $PACKETS
+PACKETS="linux-headers-$(uname -r) build-essential"
+
+sudo apt-get -q -y install $PACKETS dkms
 
 MOUNTPOINT="/media/VBoxGuestAdditions"
 
