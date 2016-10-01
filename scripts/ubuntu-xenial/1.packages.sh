@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND="noninteractive"
 
 apt-get -q -y update
 apt-get -q -y upgrade
+apt-get -q -y dist-upgrade
 
 apt-get -q -y install \
 	curl \

@@ -18,12 +18,13 @@
       "iso_checksum_type": "md5",
 
       "hard_drive_interface": "sata",
-      "disk_size": 20000,
+      "disk_size": 20480,
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--memory", "512"],
         ["modifyvm", "{{.Name}}", "--vram", "16"],
         ["modifyvm", "{{.Name}}", "--cpus", "1"],
         ["modifyvm", "{{.Name}}", "--audio", "none"],
+        ["modifyvm", "{{.Name}}", "--vrde", "off"],
         ["modifyvm", "{{.Name}}", "--nictype1", "Am79C973"],
         ["modifyvm", "{{.Name}}", "--nictype2", "Am79C973"],
         ["modifyvm", "{{.Name}}", "--nictype3", "Am79C973"],
@@ -74,10 +75,11 @@
       "inline": [
         "echo 'vagrant' | sudo -S reboot",
         "echo 'vagrant' | sudo -S ifdown -a",
-        "sleep 100"
+        "sleep 60"
       ]
     },
     {
+      "pause_before": "60s",
       "type": "shell",
       "override": {
         "ubuntu-{{user `ubuntu-version`}}-virtualbox": {

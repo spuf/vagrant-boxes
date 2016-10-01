@@ -11,3 +11,6 @@ chown -R vagrant:vagrant $VHOME/.ssh
 
 # Disable login banner
 touch $VHOME/.hushlogin
+
+# Create root dir
+[ -e /root ] || sudo mkdir /root
