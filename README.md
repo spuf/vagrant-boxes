@@ -10,7 +10,7 @@ Supported providers:
 
 Add box locally:
 
-`$ vagrant box add --force --name "$(whoami)/debian-jessie" boxes/debian-8.5.0-virtualbox.box`
+`$ vagrant box add --force --name "$(whoami)/debian-jessie" boxes/debian-8.6.0-virtualbox.box`
 
 ## Ubuntu Xenial
 
