@@ -72,6 +72,7 @@
     },
     {
       "type": "shell",
+      "expect_disconnect": true,
       "inline": [
         "echo 'vagrant' | sudo -S reboot",
         "echo 'vagrant' | sudo -S ifdown -a",
